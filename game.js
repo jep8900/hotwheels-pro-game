@@ -1,4 +1,6 @@
 // Basis data
+let money = 0;
+let money = 100; // of welk bedrag je wilt
 const players = {
   Jens: {
     name: 'Jens',
