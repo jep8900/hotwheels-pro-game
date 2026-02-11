@@ -293,3 +293,23 @@ function renderLeaderboard() {
     container.appendChild(div);
   });
 }
+let isAdmin = false;
+
+function loginAdmin(code) {
+    if (code === "HOTWHEELS123") {   // jouw geheime wachtwoord
+        isAdmin = true;
+        alert("Admin mode activated!");
+    } else {
+        alert("Wrong admin code");
+    }
+}
+
+function addMoney(amount) {
+    if (isAdmin) {
+        money += amount;
+        updateUI();
+        console.log("Admin added money:", amount);
+    } else {
+        alert("You are not admin!");
+    }
+}
