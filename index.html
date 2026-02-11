@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Hot Wheels Garage PRO</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <audio id="snd-click" src="sounds/click.mp3"></audio>
+  <audio id="snd-upgrade" src="sounds/upgrade.mp3"></audio>
+  <audio id="snd-race" src="sounds/race.mp3"></audio>
+
+  <div id="login-screen" class="screen active">
+    <h1>Hot Wheels Garage PRO</h1>
+    <p>Kies je speler:</p>
+    <button class="btn" onclick="login('Jens')">Inloggen als Jens</button>
+    <button class="btn" onclick="login('Broertje')">Inloggen als Broertje</button>
+  </div>
+
+  <div id="game-screen" class="screen">
+    <header>
+      <div id="player-info">
+        <span id="player-name"></span>
+        <span id="player-money"></span>
+      </div>
+      <nav>
+        <button class="tab-btn" onclick="showTab('garage')">Garage</button>
+        <button class="tab-btn" onclick="showTab('shop')">Shop</button>
+        <button class="tab-btn" onclick="showTab('missions')">Missies</button>
+        <button class="tab-btn" onclick="showTab('leaderboard')">Leaderboard</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- GARAGE -->
+      <section id="tab-garage" class="tab active">
+        <h2>Garage</h2>
+        <div class="upload-box">
+          <label>Upload een auto-foto:
+            <input type="file" accept="image/*" onchange="handleCarUpload(event)">
+          </label>
+        </div>
+        <div id="garage-list"></div>
+      </section>
+
+      <!-- SHOP -->
+      <section id="tab-shop" class="tab">
+        <h2>Shop</h2>
+        <div id="shop-upgrades"></div>
+        <div id="shop-gadgets"></div>
+      </section>
+
+      <!-- MISSIONS -->
+      <section id="tab-missions" class="tab">
+        <h2>Missies</h2>
+        <div id="mission-list"></div>
+      </section>
+
+      <!-- LEADERBOARD -->
+      <section id="tab-leaderboard" class="tab">
+        <h2>Leaderboard</h2>
+        <div id="leaderboard-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
