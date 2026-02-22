@@ -1,6 +1,4 @@
 // Basis data
-let money = 0;
-let money = 100; // of welk bedrag je wilt
 const players = {
   Jens: {
     name: 'Jens',
@@ -80,6 +78,9 @@ function showTab(tabName) {
   playSound('snd-click');
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById(`tab-${tabName}`).classList.add('active');
+
+  // extra logica voor speciale tabs
+  if (tabName === 'vehiclebay') renderVehicleBay();
 }
 
 // AUTO-UPLOAD → PROFIEL
@@ -295,23 +296,97 @@ function renderLeaderboard() {
     container.appendChild(div);
   });
 }
-let isAdmin = false;
 
-function loginAdmin(code) {
-    if (code === "HOTWHEELS123") {   // jouw geheime wachtwoord
-        isAdmin = true;
-        alert("Admin mode activated!");
-    } else {
-        alert("Wrong admin code");
-    }
+// =========================
+// ✈ VEHICLE BAY MODULE
+// =========================
+
+function renderVehicleBay() {
+  const car = currentPlayer.cars[0];
+  const box = document.getElementById('vehiclebay-screen');
+
+  if (!car) {
+    box.innerHTML = "<p>Je hebt nog geen auto om te docken!</p>";
+    return;
+  }
+
+  box.innerHTML = `
+    <div class="blueprint-box">
+      <h3>🔍 Scan-systeem</h3>
+      <button class="btn" onclick="scanCarInBay()">Scan Auto</button>
+      <div id="bay-scan-output"></div>
+    </div>
+
+    <div class="blueprint-box">
+      <h3>🚗 Vehicle Dock</h3>
+      Auto: ${car.name}<br>
+      Status: DOCKED<br>
+      <button class="btn" onclick="startDropSequence()">Start Drop Sequence</button>
+    </div>
+
+    <div class="blueprint-box">
+      <h3>🔥 Thruster Panel</h3>
+      Thrusters: ONLINE<br>
+      Fuel: 87%<br>
+      Heat: 12%<br>
+    </div>
+
+    <div class="blueprint-box">
+      <h3>📦 Cargo Lock System</h3>
+      Lock Status: ENGAGED<br>
+      Structural Integrity: 98%<br>
+    </div>
+
+    <div class="blueprint-box">
+      <h3>🛠 Engine Control Module</h3>
+      Engine Temp: 342°C<br>
+      Power Output: ${car.stats.power * 12}%<br>
+    </div>
+
+    <div class="blueprint-box">
+      <h3>🛬 Landing Gear Module</h3>
+      Gear: RETRACTED<br>
+      Shock Absorption: 76%<br>
+    </div>
+  `;
 }
 
-function addMoney(amount) {
-    if (isAdmin) {
-        money += amount;
-        updateUI();
-        console.log("Admin added money:", amount);
-    } else {
-        alert("You are not admin!");
-    }
+function scanCarInBay() {
+  const out = document.getElementById('bay-scan-output');
+  out.innerHTML = "Scanning...";
+  setTimeout(() => {
+    currentPlayer.score += 5;
+    out.innerHTML = `
+      <strong>SCAN COMPLETE</strong><br>
+      Speed: ${currentPlayer.cars[0].stats.speed}<br>
+      Grip: ${currentPlayer.cars[0].stats.grip}<br>
+      Boost: ${currentPlayer.cars[0].stats.boost}<br>
+      Power: ${currentPlayer.cars[0].stats.power}<br>
+      <br>+5 punten verdiend!
+    `;
+    renderLeaderboard();
+  }, 2000);
+}
+
+function startDropSequence() {
+  const car = currentPlayer.cars[0];
+
+  const successChance = car.stats.speed + car.stats.boost;
+  const roll = Math.floor(Math.random() * 20) + 1;
+
+  let result = "";
+
+  if (roll < successChance / 2) {
+    result = "❌ DROP FAILED – Auto crasht!";
+    currentPlayer.score -= 5;
+  } else if (roll < successChance) {
+    result = "⚠️ DROP OK – Matige landing.";
+    currentPlayer.score += 5;
+  } else {
+    result = "✅ PERFECT DROP – Stuntbonus!";
+    currentPlayer.score += 15;
+  }
+
+  alert(result);
+  renderLeaderboard();
 }
