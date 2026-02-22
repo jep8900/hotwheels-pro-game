@@ -121,3 +121,25 @@ header {
   from { transform: scale(0.9); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+/* Subtiele scan/tech glow animatie */
+.blueprint-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.blueprint-box::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to bottom, rgba(0,200,255,0.2), transparent);
+  animation: blueprint-scan 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes blueprint-scan {
+  0% { top: -100%; }
+  100% { top: 120%; }
+}
