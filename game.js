@@ -390,3 +390,80 @@ function startDropSequence() {
   alert(result);
   renderLeaderboard();
 }
+function startThrusterBoostTest() {
+  const car = currentPlayer.cars[0];
+  if (!car) return;
+
+  const base = car.stats.boost + car.stats.speed;
+  const roll = Math.floor(Math.random() * 20) + 1;
+
+  let text = "";
+  let points = 0;
+
+  if (roll + base < 20) {
+    text = "🔥 Thruster Test: ONSTABIEL – je verliest wat controle.";
+    points = 0;
+  } else if (roll + base < 28) {
+    text = "🔥 Thruster Test: OK – voldoende boost.";
+    points = 5;
+  } else {
+    text = "🔥 Thruster Test: EPISCH – maximale boost, stuntbonus!";
+    points = 12;
+  }
+
+  currentPlayer.score += points;
+  alert(text + (points ? `\n+${points} punten` : ""));
+  renderLeaderboard();
+}
+    <div class="blueprint-box">
+      <h3>🚀 Thruster Boost Test</h3>
+      <p>Test de boost-capaciteit van je auto.</p>
+      <button class="btn" onclick="startThrusterBoostTest()">Start Boost Test</button>
+    </div>
+function startCargoLockHack() {
+  const code = Math.floor(Math.random() * 3) + 1; // 1, 2 of 3
+  const guess = prompt("Cargo Lock Hack\nKies een kanaal (1, 2 of 3):");
+
+  if (!guess) return;
+
+  if (parseInt(guess, 10) === code) {
+    currentPlayer.score += 8;
+    alert("🔓 Cargo Lock Override GELUKT!\n+8 punten");
+  } else {
+    currentPlayer.score -= 3;
+    alert("⛔ FOUT kanaal – Lock blijft actief.\n-3 punten");
+  }
+
+  renderLeaderboard();
+}
+    <div class="blueprint-box">
+      <h3>📦 Cargo Lock System</h3>
+      Lock Status: ENGAGED<br>
+      Structural Integrity: 98%<br>
+      <button class="btn" onclick="startCargoLockHack()">Hack Cargo Lock</button>
+    </div>
+function startDropSequence() {
+  const car = currentPlayer.cars[0];
+
+  const successChance = car.stats.speed + car.stats.boost;
+  const roll = Math.floor(Math.random() * 20) + 1;
+
+  let result = "";
+  let extra = "";
+
+  if (roll < successChance / 2) {
+    result = "❌ DROP FAILED – Auto crasht!";
+    currentPlayer.score -= 5;
+  } else if (roll < successChance) {
+    result = "⚠️ DROP OK – Matige landing.";
+    currentPlayer.score += 5;
+  } else {
+    result = "✅ PERFECT DROP – Stuntbonus!";
+    currentPlayer.score += 15;
+    extra = "\nPerfecte drop! +5 extra punten voor stijl.";
+    currentPlayer.score += 5;
+  }
+
+  alert(result + extra);
+  renderLeaderboard();
+}
